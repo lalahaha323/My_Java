@@ -1,9 +1,7 @@
 package chapter_15;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
+import java.util.ArrayList;
 
 public class Person implements Serializable {
     private String name;
@@ -25,12 +23,10 @@ public class Person implements Serializable {
     public String getName(){
         return this.name;
     }
-    private void writeObject(ObjectOutputStream out) throws IOException {
-        out.writeObject(new StringBuffer(name).reverse());
-        out.writeInt(age);
-    }
-    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
-        this.name = ((StringBuffer)in.readObject()).reverse().toString();
-        this.age = in.readInt();
+    private Object writeReplace() throws ObjectStreamException {
+        ArrayList<Object> list = new ArrayList<Object>();
+        list.add(name);
+        list.add(age);
+        return list;
     }
 }
